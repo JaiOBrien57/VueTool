@@ -20,7 +20,6 @@
             <Column field="qty" header="QTY" sortable style="width: 25%"></Column>
         </DataTable>
     </div>
-
 </template>
 
 
