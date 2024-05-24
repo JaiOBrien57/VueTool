@@ -48,7 +48,7 @@ app.listen(2000, () => {
 //Access on ******* http://api.renewablemobile.com.au:2000/
 
 
-  app.get('/TestEndpoint', (req, res) => {
-    res.json({'Test':'Hello World!'})
-    console.log("Get Request Received")
+  app.post('/TestEndpoint', (req, res) => {
+    console.log("Get Request Received:",req.body)
+    res.json({"Server Response":"Success"});
   })
