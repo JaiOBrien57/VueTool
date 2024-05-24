@@ -53,7 +53,7 @@ const onUpload = () => {
 
 function Test(){
   Counta.value = Counta.value+1
-  console.log("Clicked",Counta)
+  console.log("Clicked BTN:",Counta)
 }
 
 </script>
