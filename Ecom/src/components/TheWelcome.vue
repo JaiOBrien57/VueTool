@@ -50,14 +50,30 @@ const toast = useToast();
 const onAdvancedUpload = async (event) => {
 
     const file = event.files[0];
-    const JSONFile = Papa.parse(file, {download: true,encoding: "UTF-8",complete: function (results) {console.log(results);}})
-    
-    console.log(JSONFile);
+    const JSONFile = Papa.parse(file, {download: true,encoding: "UTF-8",complete: async function (results){
 
-      const imgUpload = await fetch("http://localhost:2000/TestEndpoint", {
+        const JSONData = {"data":results.data}
+
+        console.log(JSONData)
+
+        const myHeaders = {"Content-Type": "application/json"}
+
+        const postBody = JSON.stringify(JSONData)
+
+        const requestOptions = {
         method: "POST",
-        body: JSONFile,
-      });
+        headers: myHeaders,
+        body: postBody,
+        redirect: "follow"
+        };
+
+        const request = await fetch("http://localhost:2000/TestEndpoint",requestOptions)
+        const result = await request.json()
+
+        console.log("Server Response:",result)
+        
+        ;}})
+
 
       toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
     };

@@ -34,7 +34,8 @@ app.use(expressWinston.logger({
 //Setting up the app background vars
 app.use(cors());
 app.disable("etag");
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '100mb' }));
 app.use(bodyParser.json());
 app.use(express.json());
 
