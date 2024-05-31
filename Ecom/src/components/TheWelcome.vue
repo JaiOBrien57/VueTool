@@ -13,27 +13,47 @@
     </div>
 
     <div class="card">
-        <DataTable v-model:selection="selectedProduct" :value="customers" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem"
-                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                currentPageReportTemplate="{first} to {last} of {totalRecords}">
-                <template #header>
+        <DataTable v-model:selection="selectedProduct" v-model:editingRows="editingRows" editMode="row" @row-edit-save="onRowEditSave" dataKey="id" scrollable scrollHeight="400px" size="small" stripedRows :value="products" paginator :rows="100" :rowsPerPageOptions="[5, 10, 20, 50, 100]" tableStyle="min-width: 90rem" 
+        :pt="{
+                column: {
+                    bodycell: ({ state }) => ({
+                        style:  state['d_editing']&&'padding-top: 0.6rem; padding-bottom: 0.6rem'
+                    })
+                }
+            }">
+
+            <template #header>
                 <div style="text-align: left">
                     <Button icon="pi pi-external-link" label="Export" @click="" />
                 </div>
             </template>
-            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column field="model" header="Model" sortable style="width: 25%"></Column>
-            <Column field="qty" header="QTY" sortable style="width: 25%"></Column>
+
+            <Column selectionMode="multiple" headerStyle="width: 3rem">
+            </Column>
+
+            <Column field="model" header="Model" sortable style="width: 25%">
+            </Column>
+
+            <Column field="qty" header="QTY" sortable style="width: 25%">
+                <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" />
+                </template>
+            </Column>
+
+            <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center">
+            
+            </Column>
+
         </DataTable>
     </div>
 
 </template>
 
 
-
 <script setup>
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
+import InputText from 'primevue/inputtext';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';  
 import Row from 'primevue/row';
@@ -43,10 +63,12 @@ import Papa from "papaparse";
 import { useToast } from "primevue/usetoast";
 import { ref, onMounted } from 'vue';
 
-const customers = ref([{"id":1,"model":"iPhone 11","qty":1},{"id":2,"model":"iPhone 12","qty":4},{"id":3,"model":"iPhone 11","qty":1},{"id":4,"model":"iPhone 12","qty":4},{"id":5,"model":"iPhone 11","qty":1},{"id":6,"model":"iPhone 12","qty":4},{"id":7,"model":"iPhone 11","qty":1},{"id":8,"model":"iPhone 12","qty":4},{"id":9,"model":"iPhone 11","qty":1},{"id":10,"model":"iPhone 12","qty":4}]);
+const editingRows = ref([]);
+const products = ref([{"id":1,"model":"iPhone 11","qty":1},{"id":2,"model":"iPhone 12","qty":4},{"id":3,"model":"iPhone 11","qty":1},{"id":4,"model":"iPhone 12","qty":4},{"id":5,"model":"iPhone 11","qty":1},{"id":6,"model":"iPhone 12","qty":4},{"id":7,"model":"iPhone 11","qty":1},{"id":8,"model":"iPhone 12","qty":4},{"id":9,"model":"iPhone 11","qty":1},{"id":10,"model":"iPhone 12","qty":4}]);
 const selectedProduct = ref();
 const toast = useToast();
 
+// On CSV Avail List Upload
 const onAdvancedUpload = async (event) => {
 
     const file = event.files[0];
@@ -74,8 +96,14 @@ const onAdvancedUpload = async (event) => {
         
         ;}})
 
-
       toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+    };
+
+    
+    const onRowEditSave = (event) => {
+    let { newData, index } = event;
+
+    products.value[index] = newData;
     };
 
 

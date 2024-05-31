@@ -12,6 +12,8 @@ const bcrypt = require("bcryptjs");
 const { google } = require('googleapis');
 const { logging } = require("googleapis/build/src/apis/logging");
 const { nextTick } = require("process");
+const { GoogleSpreadsheet } = require('google-spreadsheet');
+const { JWT } = require('google-auth-library');
 var winston = require('winston'), expressWinston = require('express-winston');
 
 
@@ -39,17 +41,37 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '100mb' }));
 app.use(bodyParser.json());
 app.use(express.json());
 
+//Setting up Google Sheets API
+async function GoogleSheetsSetup() {
+  const serviceAccountAuth = new JWT({
+    email: "bot-423@ringed-hearth-368707.iam.gserviceaccount.com",
+    key: "4696d79ded89ee94fc66fa6a09844adadda5f360",
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  });
+  const doc = new GoogleSpreadsheet('1rqVXjOautFu6PbzyJC-L00DWppbWMzPHE7siaiqY-H0', serviceAccountAuth);
+  await doc.loadInfo();
+  // const sheet = doc.sheetsById['1rqVXjOautFu6PbzyJC-L00DWppbWMzPHE7siaiqY-H0']
+  // console.log(sheet.title);
+  // console.log(sheet.rowCount);
+}
+
+GoogleSheetsSetup();
+
 //Launch the backend server
 app.listen(2000, () => {
     console.log("Server Started On Port 2000");
   });
 
-//To setup public access see below
-//https://www.reddit.com/r/node/comments/51pf93/how_can_i_access_my_express_nodejs_server_through/
-//Access on ******* http://api.renewablemobile.com.au:2000/
+
+app.post('/TestEndpoint', (req, res) => {
+  
+  console.log("Get Request Received:")
+  
+  FrontEndData = req.body.data
+  
+  res.json({"Server Response":"Success"});
+})
 
 
-  app.post('/TestEndpoint', (req, res) => {
-    console.log("Get Request Received:",req.body)
-    res.json({"Server Response":"Success"});
-  })
+
+
