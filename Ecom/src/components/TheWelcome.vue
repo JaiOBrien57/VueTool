@@ -13,11 +13,11 @@
     </div>
 
     <div class="card">
-        <DataTable v-model:selection="selectedProduct" v-model:editingRows="editingRows" editMode="row" @row-edit-save="onRowEditSave" dataKey="id" scrollable scrollHeight="400px" size="small" stripedRows :value="products" paginator :rows="100" :rowsPerPageOptions="[5, 10, 20, 50, 100]" tableStyle="min-width: 90rem" 
+        <DataTable v-model:selection="selectedProduct" editMode="cell" @cell-edit-complete="onRowEditSave" dataKey="id" scrollable scrollHeight="600px" size="small" stripedRows :value="products" paginator :rows="100" :rowsPerPageOptions="[5, 10, 20, 50, 100]" tableStyle="min-width: 110rem" 
         :pt="{
                 column: {
                     bodycell: ({ state }) => ({
-                        style:  state['d_editing']&&'padding-top: 0.6rem; padding-bottom: 0.6rem'
+                        class: [{ 'pt-0 pb-0': state['d_editing'] }]
                     })
                 }
             }">
@@ -28,20 +28,31 @@
                 </div>
             </template>
 
-            <Column selectionMode="multiple" headerStyle="width: 3rem">
+            <Column selectionMode="multiple" headerStyle="width: 3rem" style="width: 1%">
             </Column>
 
-            <Column field="model" header="Model" sortable style="width: 25%">
+            <Column field="sku" header="SKU" sortable style="width: 5%">
             </Column>
 
-            <Column field="qty" header="QTY" sortable style="width: 25%">
-                <template #editor="{ data, field }">
-                    <InputText v-model="data[field]" />
+            <Column field="name" header="Name" sortable style="width: 40%">
+            </Column>
+
+            <Column field="qty" header="QTY" sortable style="width: 5%">
+            </Column>
+
+            <Column header="Mapped Status" sortable style="width: 10%">
+                <template #body="slotProps">
+                    <Tag :value="slotProps.data.mappedstatus" :severity="getSeverity(slotProps.data)" />
                 </template>
             </Column>
 
-            <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center">
-            
+            <Column field="reebeloqty" header="Reebelo QTY" sortable style="width: 10%">
+            </Column>
+
+            <Column field="reebelotarget" header="Reebelo Target" sortable style="width: 10%">
+                <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" autofocus  />
+                </template>
             </Column>
 
         </DataTable>
@@ -52,6 +63,7 @@
 
 <script setup>
 import Button from 'primevue/button';
+import Tag from 'primevue/tag';
 import DataTable from 'primevue/datatable';
 import InputText from 'primevue/inputtext';
 import Column from 'primevue/column';
@@ -64,9 +76,26 @@ import { useToast } from "primevue/usetoast";
 import { ref, onMounted } from 'vue';
 
 const editingRows = ref([]);
-const products = ref([{"id":1,"model":"iPhone 11","qty":1},{"id":2,"model":"iPhone 12","qty":4},{"id":3,"model":"iPhone 11","qty":1},{"id":4,"model":"iPhone 12","qty":4},{"id":5,"model":"iPhone 11","qty":1},{"id":6,"model":"iPhone 12","qty":4},{"id":7,"model":"iPhone 11","qty":1},{"id":8,"model":"iPhone 12","qty":4},{"id":9,"model":"iPhone 11","qty":1},{"id":10,"model":"iPhone 12","qty":4}]);
+const products = ref([]);
 const selectedProduct = ref();
 const toast = useToast();
+
+// Get Sheets Data on Refresh
+onMounted (async()=>{
+
+    const myHeaders = {"Content-Type": "application/json"}
+    const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow"
+        };
+
+    const request = await fetch("http://localhost:2000/GetSheetsData",requestOptions)
+    const result = await request.json()
+    products.value = result.rows
+    console.log(result)
+});
+
 
 // On CSV Avail List Upload
 const onAdvancedUpload = async (event) => {
@@ -105,6 +134,22 @@ const onAdvancedUpload = async (event) => {
 
     products.value[index] = newData;
     };
+
+    const getSeverity = (product) => {
+    switch (product.mappedstatus) {
+        case 'Mapped':
+            return 'success';
+
+        case 'Unmapped':
+            return 'warning';
+
+        case 'Not On Reebelo':
+            return 'danger';
+
+        default:
+            return null;
+    }
+};
 
 
 </script>
