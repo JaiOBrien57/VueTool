@@ -1,7 +1,6 @@
 <template>
 
-    <div class="card">
-        <DataTable v-model:selection="selectedProduct" editMode="cell" @cell-edit-complete="onRowEditSave" dataKey="id" scrollable scrollHeight="600px" size="small" stripedRows :value="products" paginator :rows="100" :rowsPerPageOptions="[5, 10, 20, 50, 100]" tableStyle="min-width: 110rem" 
+        <DataTable v-model:selection="selectedProduct" :rowStyle="rowStyle" columnResizeMode="fit" :loading="loading" showGridlines rowHover editMode="cell" @cell-edit-complete="onRowEditSave" dataKey="id" paginator :rows="20" :rowsPerPageOptions="[5, 10, 20, 50, 100]" scrollable scrollHeight="80vh" size="small" stripedRows :value="products" tableStyle="font-size: 14px;"
         :pt="{
                 column: {
                     bodycell: ({ state }) => ({
@@ -11,40 +10,65 @@
             }">
 
             <template #header>
-                <div style="text-align: left">
-                    <Button icon="pi pi-external-link" label="Export" @click="" />
+                <div style="text-align: left;">
+                    <div class="card flex justify-content-center flex-wrap gap-3">
+                    <SplitButton label="Save" :model="items" @click="save"></SplitButton>
+                </div>
                 </div>
             </template>
 
-            <Column selectionMode="multiple" headerStyle="width: 3rem" style="width: 1%">
+            <Column selectionMode="multiple" >
             </Column>
 
-            <Column field="sku" header="SKU" sortable style="width: 5%">
+            <Column field="sku" header="SKU" >
             </Column>
 
-            <Column field="name" header="Name" sortable style="width: 40%">
+            <Column field="name" header="Name" sortable>
             </Column>
 
-            <Column field="qty" header="QTY" sortable style="width: 5%">
+            <Column field="qty" header="QTY" sortable>
             </Column>
 
-            <Column header="Mapped Status" sortable style="width: 10%">
+            <Column header="Status" sortable>
                 <template #body="slotProps">
                     <Tag :value="slotProps.data.mappedstatus" :severity="getSeverity(slotProps.data)" />
                 </template>
             </Column>
 
-            <Column field="reebeloqty" header="Reebelo QTY" sortable style="width: 10%">
+            <Column field="reebeloqty" header="Reebelo QTY">
             </Column>
 
-            <Column field="reebelotarget" header="Reebelo Target" sortable style="width: 10%">
+            <Column field="reebelotarget" header="R Target">
+            </Column>
+
+            <Column field="reebelomin" header="R Min">
+            </Column>
+
+            <Column field="pricetowin" header="Price To Win">
+            </Column>
+
+            <Column field="lostby" header="Lost By" sortable>
+            </Column>
+
+            <Column field="sheettarget" header="Target" style="width: 11vh; height: 4vh;" sortable>
+                <template #body="{ data, field }">
+                {{ formatCurrency(data[field]) }}
+            </template>
                 <template #editor="{ data, field }">
-                    <InputText v-model="data[field]" autofocus  />
+                    <InputText v-model="data[field]" mode="currency" currency="USD" locale="en-US" autofocus style="font-size: 14px; width: 9vh; height: 3vh;"  />
+                </template>
+            </Column>
+
+            <Column field="sheetmin" header="Min" style="width: 11vh; height: 4vh;" sortable>
+                <template #body="{ data, field }">
+                {{ formatCurrency(data[field]) }}
+            </template>
+                <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" mode="currency" currency="USD" locale="en-US" autofocus style="font-size: 14px; width: 9vh; height: 3vh;"  />
                 </template>
             </Column>
 
         </DataTable>
-    </div>
 
 </template>
 
@@ -60,14 +84,14 @@ import Row from 'primevue/row';
 import FileUpload from 'primevue/fileupload';
 import Toast from 'primevue/toast';
 import Papa from "papaparse";
+import SplitButton from 'primevue/splitbutton';
 import { useToast } from "primevue/usetoast";
 import { ref, onMounted } from 'vue';
 
 const editingRows = ref([]);
 const products = ref([]);
 const selectedProduct = ref();
-
-
+const loading = ref(true);
 
 // Get Sheets Data on Refresh
 onMounted (async()=>{
@@ -82,6 +106,7 @@ onMounted (async()=>{
     const request = await fetch("http://localhost:2000/GetSheetsData",requestOptions)
     const result = await request.json()
     products.value = result.rows
+    loading.value = false;
     console.log(result)
 });
 
@@ -113,6 +138,34 @@ const getSeverity = (product) => {
             return null;
     }
 };
+
+
+// Format Currency
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+}
+
+// Format Row Colour
+const rowStyle = (data) => {
+    if (data.lostby !== '') {
+        return { background: '#faa5a5'};
+    }
+};
+
+
+
+const items = [
+    {
+        label: 'Update',
+        command: () => {
+            console.log("Update Clicked");
+        }
+    },{
+    label: 'Test',
+        command: () => {
+            console.log("Update Clicked");
+        }
+    }]
 
 
 </script>

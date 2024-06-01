@@ -85,8 +85,13 @@ app.get('/GetSheetsData',async (req,res)=>{
     let reebeloqty = Data[5]
     let reebelotarget = Data[6]
     let reebelomin = Data[7]
+    let pricetowin = Data[8]
+    let lostby = Data[9]
+    let buyboxstatus = Data[10]
+    let sheettarget = parseFloat(Data[22].toString().replace("$","").replace(",",""))
+    let sheetmin = parseFloat(Data[23].toString().replace("$","").replace(",",""))
 
-    Rows.push({"id":Count,"sku":sku,"name":name,"qty":qty,"mappedstatus":mappedstatus,"reebeloqty":reebeloqty,"reebelotarget":reebelotarget,"reebel":reebeloqty,"reebelotarget":reebelotarget,"reebeloqty":reebeloqty})
+    Rows.push({"id":Count,"sku":sku,"name":name,"qty":qty,"mappedstatus":mappedstatus,"reebeloqty":reebeloqty,"reebelotarget":reebelotarget,"reebelomin":reebelomin,"pricetowin":pricetowin,"lostby":lostby,"buyboxstatus":buyboxstatus,"sheettarget":sheettarget,"sheetmin":sheetmin})
   });
 
   const Payload = {"rows":Rows}

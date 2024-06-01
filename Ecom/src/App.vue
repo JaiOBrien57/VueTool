@@ -18,5 +18,10 @@ import reebelo_au from './pages/reebelo_au.vue'
   body {
     background-color: #e0e0e0;
   }
+  #app {
+    margin: 0;
+    width: 100%;
+    padding: 10px;
+  }
   </style>
   
