@@ -1,6 +1,6 @@
 <template>
 
-        <DataTable v-model:selection="selectedProduct" :rowStyle="rowStyle" columnResizeMode="fit" :loading="loading" showGridlines rowHover editMode="cell" @cell-edit-complete="onRowEditSave" dataKey="id" paginator :rows="20" :rowsPerPageOptions="[5, 10, 20, 50, 100]" scrollable scrollHeight="80vh" size="small" stripedRows :value="products" tableStyle="font-size: 14px;"
+        <DataTable v-model:selection="selectedProduct" :rowStyle="rowStyle" columnResizeMode="fit" :loading="loading" showGridlines rowHover editMode="cell" @cell-edit-complete="onRowEditSave" dataKey="id" paginator :rows="20" :rowsPerPageOptions="[5, 10, 20, 50, 100]" scrollable scrollHeight="80vh" size="small" stripedRows :value="products" tableStyle="min-height: 80vh; font-size: 14px;"
         :pt="{
                 column: {
                     bodycell: ({ state }) => ({
@@ -35,13 +35,13 @@
                 </template>
             </Column>
 
-            <Column field="reebeloqty" header="Reebelo QTY">
+            <Column field="reebeloqty" header="R-QTY">
             </Column>
 
-            <Column field="reebelotarget" header="R Target">
+            <Column field="reebelotarget" header="R-Target">
             </Column>
 
-            <Column field="reebelomin" header="R Min">
+            <Column field="reebelomin" header="R-Min">
             </Column>
 
             <Column field="pricetowin" header="Price To Win">
