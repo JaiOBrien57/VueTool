@@ -1,10 +1,10 @@
 <script setup>
-import TheWelcome from './components/TheWelcome.vue'
+import reebelo_au from './pages/reebelo_au.vue'
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <reebelo_au />
   </main>
 </template>
 
