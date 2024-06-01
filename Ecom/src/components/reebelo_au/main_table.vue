@@ -1,16 +1,4 @@
-<!-- UI Libary: https://primevue.org/datatable/ -->
-<!-- CSV Reading Libary: https://www.papaparse.com/ --> 
-
 <template>
-
-  <div class="card">
-        <Toast />
-        <FileUpload name="AvailList" :custom-upload="true" @uploader="onAdvancedUpload" :multiple="false" accept=".csv" :maxFileSize="10000000000000">
-            <template #empty>
-                <p>Drag and drop files to here to upload.</p>
-            </template>
-        </FileUpload>
-    </div>
 
     <div class="card">
         <DataTable v-model:selection="selectedProduct" editMode="cell" @cell-edit-complete="onRowEditSave" dataKey="id" scrollable scrollHeight="600px" size="small" stripedRows :value="products" paginator :rows="100" :rowsPerPageOptions="[5, 10, 20, 50, 100]" tableStyle="min-width: 110rem" 
@@ -78,7 +66,8 @@ import { ref, onMounted } from 'vue';
 const editingRows = ref([]);
 const products = ref([]);
 const selectedProduct = ref();
-const toast = useToast();
+
+
 
 // Get Sheets Data on Refresh
 onMounted (async()=>{
@@ -97,45 +86,19 @@ onMounted (async()=>{
 });
 
 
-// On CSV Avail List Upload
-const onAdvancedUpload = async (event) => {
 
-    const file = event.files[0];
-    const JSONFile = Papa.parse(file, {download: true,encoding: "UTF-8",complete: async function (results){
 
-        const JSONData = {"data":results.data}
-
-        console.log(JSONData)
-
-        const myHeaders = {"Content-Type": "application/json"}
-
-        const postBody = JSON.stringify(JSONData)
-
-        const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: postBody,
-        redirect: "follow"
-        };
-
-        const request = await fetch("http://localhost:2000/TestEndpoint",requestOptions)
-        const result = await request.json()
-
-        console.log("Server Response:",result)
-        
-        ;}})
-
-      toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-    };
-
-    
-    const onRowEditSave = (event) => {
+// On Row Save
+const onRowEditSave = (event) => {
     let { newData, index } = event;
 
     products.value[index] = newData;
-    };
+};
 
-    const getSeverity = (product) => {
+
+
+// Return Mapped Colours
+const getSeverity = (product) => {
     switch (product.mappedstatus) {
         case 'Mapped':
             return 'success';
