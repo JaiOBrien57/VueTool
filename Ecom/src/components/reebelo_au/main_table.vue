@@ -12,7 +12,7 @@
             <template #header>
                 <div style="text-align: left;">
                     <div class="card flex justify-content-center flex-wrap gap-3">
-                    <SplitButton label="Save" :model="items" @click="save"></SplitButton>
+                    <SplitButton label="Update All" :model="items" @click="save"></SplitButton>
                 </div>
                 </div>
             </template>
@@ -156,12 +156,12 @@ const rowStyle = (data) => {
 
 const items = [
     {
-        label: 'Update',
+        label: 'Update-Woo',
         command: () => {
             console.log("Update Clicked");
         }
     },{
-    label: 'Test',
+    label: 'Update-Reebelo',
         command: () => {
             console.log("Update Clicked");
         }
