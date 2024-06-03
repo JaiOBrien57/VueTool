@@ -1,10 +1,12 @@
 <script setup>
 import reebelo_au from './pages/reebelo_au.vue'
+import renewed_pricing from './pages/renewed_pricing.vue'
 </script>
 
 <template>
   <main>
-    <reebelo_au />
+    <!-- <reebelo_au /> -->
+    <renewed_pricing />
   </main>
 </template>
 

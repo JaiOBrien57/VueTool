@@ -1,6 +1,6 @@
 <template>
 
-        <DataTable v-model:expandedRows="expandedRows" :rowStyle="rowStyle" columnResizeMode="fit" :loading="loading" showGridlines rowHover editMode="cell" @cell-edit-complete="onRowEditSave" dataKey="id" paginator :rows="20" :rowsPerPageOptions="[5, 10, 20, 50, 100]" scrollable scrollHeight="80vh" size="small" stripedRows :value="products" tableStyle="min-height: 80vh; font-size: 14px;"
+        <DataTable v-model:expandedRows="expandedRows" :rowStyle="rowStyle" columnResizeMode="fit" :loading="loading" rowHover editMode="cell" @cell-edit-complete="onRowEditSave" dataKey="id" paginator :rows="20" :rowsPerPageOptions="[5, 10, 20, 50, 100]" scrollable scrollHeight="80vh" size="small" stripedRows :value="products" tableStyle="min-height: 80vh; font-size: 14px;"
         :pt="{
                 column: {
                     bodycell: ({ state }) => ({
@@ -74,8 +74,8 @@
                 <div class="p-3">
                     <h5>Expanded Data</h5>
                     <DataTable :value="slotProps.data.expanddata">
-                        <Column field="id" header="Id" sortable></Column>
-                        <Column field="name" header="Name" sortable></Column>
+                        <Column field="id" header="Id" sortable style="font-size: 14px;"></Column>
+                        <Column field="name" header="Name" sortable style="font-size: 14px;" ></Column>
                     </DataTable>
                 </div>
             </template>
@@ -164,8 +164,7 @@ const rowStyle = (data) => {
     }
 };
 
-
-
+// BTN Format
 const items = [
     {
         label: 'Update-Woo',
