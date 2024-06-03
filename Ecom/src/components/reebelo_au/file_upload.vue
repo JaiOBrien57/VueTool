@@ -38,7 +38,7 @@ const onAdvancedUpload = async (event) => {
         redirect: "follow"
         };
 
-        const request = await fetch("http://localhost:2000/TestEndpoint",requestOptions)
+        const request = await fetch("/api/TestEndpoint",requestOptions)
         const result = await request.json()
 
         console.log("Server Response:",result)

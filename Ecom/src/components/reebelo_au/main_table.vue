@@ -1,6 +1,6 @@
 <template>
 
-        <DataTable v-model:selection="selectedProduct" :rowStyle="rowStyle" columnResizeMode="fit" :loading="loading" showGridlines rowHover editMode="cell" @cell-edit-complete="onRowEditSave" dataKey="id" paginator :rows="20" :rowsPerPageOptions="[5, 10, 20, 50, 100]" scrollable scrollHeight="80vh" size="small" stripedRows :value="products" tableStyle="min-height: 80vh; font-size: 14px;"
+        <DataTable v-model:expandedRows="expandedRows" :rowStyle="rowStyle" columnResizeMode="fit" :loading="loading" showGridlines rowHover editMode="cell" @cell-edit-complete="onRowEditSave" dataKey="id" paginator :rows="20" :rowsPerPageOptions="[5, 10, 20, 50, 100]" scrollable scrollHeight="80vh" size="small" stripedRows :value="products" tableStyle="min-height: 80vh; font-size: 14px;"
         :pt="{
                 column: {
                     bodycell: ({ state }) => ({
@@ -16,6 +16,8 @@
                 </div>
                 </div>
             </template>
+
+            <Column expander style="width: 5rem" />
 
             <Column selectionMode="multiple" >
             </Column>
@@ -68,6 +70,16 @@
                 </template>
             </Column>
 
+            <template #expansion="slotProps">
+                <div class="p-3">
+                    <h5>Expanded Data</h5>
+                    <DataTable :value="slotProps.data.expanddata">
+                        <Column field="id" header="Id" sortable></Column>
+                        <Column field="name" header="Name" sortable></Column>
+                    </DataTable>
+                </div>
+            </template>
+
         </DataTable>
 
 </template>
@@ -103,7 +115,7 @@ onMounted (async()=>{
         redirect: "follow"
         };
 
-    const request = await fetch("http://localhost:2000/GetSheetsData",requestOptions)
+    const request = await fetch("/api/GetSheetsData",requestOptions)
     const result = await request.json()
     products.value = result.rows
     loading.value = false;

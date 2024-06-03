@@ -42,12 +42,12 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 //Launch the backend server
-app.listen(2000, () => {
+app.listen(2000, '0.0.0.0', () => {
     console.log("Server Started On Port 2000");
   });
 
 
-app.post('/TestEndpoint', (req, res) => {
+app.post('/api/TestEndpoint', (req, res) => {
   
   console.log("Post Request Received:")
   FrontEndData = req.body.data
@@ -56,7 +56,7 @@ app.post('/TestEndpoint', (req, res) => {
 
 
 
-app.get('/GetSheetsData',async (req,res)=>{
+app.get('/api/GetSheetsData',async (req,res)=>{
 
   console.log("Get Request Received:")
 
@@ -90,8 +90,9 @@ app.get('/GetSheetsData',async (req,res)=>{
     let buyboxstatus = Data[10]
     let sheettarget = parseFloat(Data[22].toString().replace("$","").replace(",",""))
     let sheetmin = parseFloat(Data[23].toString().replace("$","").replace(",",""))
+    let TestArray = [{'id':'0000','name':'testname'},{'id':'0000','name':'testname2'}]
 
-    Rows.push({"id":Count,"sku":sku,"name":name,"qty":qty,"mappedstatus":mappedstatus,"reebeloqty":reebeloqty,"reebelotarget":reebelotarget,"reebelomin":reebelomin,"pricetowin":pricetowin,"lostby":lostby,"buyboxstatus":buyboxstatus,"sheettarget":sheettarget,"sheetmin":sheetmin})
+    Rows.push({"id":Count,"sku":sku,"name":name,"qty":qty,"mappedstatus":mappedstatus,"reebeloqty":reebeloqty,"reebelotarget":reebelotarget,"reebelomin":reebelomin,"pricetowin":pricetowin,"lostby":lostby,"buyboxstatus":buyboxstatus,"sheettarget":sheettarget,"sheetmin":sheetmin,'expanddata':TestArray})
   });
 
   const Payload = {"rows":Rows}
