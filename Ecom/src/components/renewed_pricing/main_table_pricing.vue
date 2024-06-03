@@ -98,7 +98,7 @@
 
                         <Column header="Faulty" style="font-size: 14px; width: 20%;" >
                             <template #body="slotProps">
-                                <Tag :value="slotProps.data.FaultyTradeIn" style="background: #c6eee1; color: #000000"/>
+                                <Tag :value="slotProps.data.FaultyTradeIn" style="background: #c6eee1; color: #000000" />
                             </template>
                         </Column>
 
