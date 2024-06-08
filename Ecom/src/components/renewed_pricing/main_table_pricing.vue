@@ -92,7 +92,7 @@
 
                         <Column header="Working" style="font-size: 14px; width: 20%;" >
                             <template #body="slotProps">
-                                <Tag :value="slotProps.data.workingTradeIn" style="background: #c6eee1; color: #000000"/>
+                                <Tag :value="slotProps.data.workingTradeIn" style="background: #c6eee1; color: #000000" />
                             </template>
                         </Column>
 
